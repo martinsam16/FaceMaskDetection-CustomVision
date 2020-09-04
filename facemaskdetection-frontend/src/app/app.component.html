@@ -1,0 +1,39 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Face Mask Detection - Martín Alexis Samán Arata</mat-card-title>
+    <mat-card-subtitle>Microsoft Custom Vision</mat-card-subtitle>
+  </mat-card-header>
+  <img [src]="urlImagen" width="500" style="margin-left: 50vh">
+
+  <mat-card-content>
+
+    <mat-form-field>
+      <mat-label>Imagen</mat-label>
+      <input matInput placeholder="Ingrese la url de la imagen" [(ngModel)]="urlImagen">
+      <button mat-button *ngIf="urlImagen" matSuffix mat-icon-button aria-label="Clear" (click)="urlImagen='';clear()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-list *ngIf="modelo.predictions">
+      <div mat-subheader>Datos</div>
+      <mat-list-item>
+        <mat-icon mat-list-icon>masks</mat-icon>
+        <div mat-line *ngIf="modelo.predictions[0].probability>=0.9; else sinMask">SI</div>
+        <ng-template #sinMask>
+          <div mat-line>NO</div>
+        </ng-template>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-icon mat-list-icon>timeline</mat-icon>
+        <div mat-line>{{modelo.predictions[0].probability}}</div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-list>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" *ngIf="urlImagen" (click)="predecirUrl()">Predecir</button>
+  </mat-card-actions>
+</mat-card>

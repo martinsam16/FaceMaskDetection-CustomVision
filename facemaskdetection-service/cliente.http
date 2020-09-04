@@ -1,0 +1,14 @@
+POST http://localhost:8082/url
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Url": "https://i.pinimg.com/736x/9d/3e/87/9d3e8741c2675fb4b158c4f8a0797730.jpg"
+}
+
+###
+GET http://localhost:8082
+Content-Type: application/json
+
+
+###
