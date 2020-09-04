@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Face Mask Detection</title>
+</h:head>
+
+<h:body>
+    <h1>Face Mask Detection</h1>
+    <h2>Custom Vision - Martín Alexis Samán Arata</h2>
+    <h:form id="frmInput">
+        <p:growl life="10000" showDetail="true" showSummary="true"/>
+        <img src="#{customVisionBean.urlImagen}" alt="imagen a predecir" width="500"></img>
+        <p:separator/>
+        <p:inputText value="#{customVisionBean.urlImagen}"/>
+        <p:commandButton id="btnPredecir" actionListener="#{customVisionBean.predecirUrl()}" value="Predecir"
+                         update="frmInput"/>
+        <p:blockUI block="frmInput" trigger="btnPredecir"/>
+    </h:form>
+</h:body>
+</html>
