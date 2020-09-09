@@ -11,3 +11,9 @@ export class Prediction {
   tagId: string;
   tagName: string;
 }
+
+export class Imagen {
+  src: string;
+  file: File;
+
+}

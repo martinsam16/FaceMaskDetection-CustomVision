@@ -3,23 +3,49 @@
     <mat-card-title>Face Mask Detection - Martín Alexis Samán Arata</mat-card-title>
     <mat-card-subtitle>Microsoft Custom Vision</mat-card-subtitle>
   </mat-card-header>
-  <img [src]="urlImagen" width="500" style="margin-left: 50vh">
+  <img [src]="urlImagen" *ngIf="group.value=='url'" height="300">
+  <img [src]="imagen.src" *ngIf="group.value=='archivo'" height="300">
+  <img src="https://nostrahomes.com.au/uploads/cms/unknown.jpg" height="300"
+       *ngIf="(!urlImagen && group.value=='url') || !imagen.src && group.value=='archivo'">
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" *ngIf="urlImagen && group.value=='url'"
+            (click)="predecirUrl()">Predecir
+    </button>
+    <button mat-raised-button color="primary" *ngIf="imagen.src && group.value=='archivo'"
+            (click)="predecirImagen()">Predecir
+    </button>
+  </mat-card-actions>
 
   <mat-card-content>
+    <mat-button-toggle-group #group="matButtonToggleGroup" value="url">
+      <mat-button-toggle value="url">URL</mat-button-toggle>
+      <mat-button-toggle value="archivo">Archivo</mat-button-toggle>
+    </mat-button-toggle-group>
 
-    <mat-form-field>
+    <p></p>
+
+    <mat-form-field *ngIf="group.value=='url'">
       <mat-label>Imagen</mat-label>
       <input matInput placeholder="Ingrese la url de la imagen" [(ngModel)]="urlImagen">
-      <button mat-button *ngIf="urlImagen" matSuffix mat-icon-button aria-label="Clear" (click)="urlImagen='';clear()">
+      <button mat-button *ngIf="urlImagen" matSuffix mat-icon-button aria-label="Clear"
+              (click)="urlImagen=''">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
 
-    <mat-list *ngIf="modelo.predictions">
-      <div mat-subheader>Datos</div>
+    <div *ngIf="group.value=='archivo'">
+      <input #imagenInput
+             type="file"
+             accept="image/*"
+             (change)="processFile(imagenInput)">
+    </div>
+
+    <mat-list *ngIf="prediccionImagen.predictions && group.value=='archivo'">
+      <div mat-subheader>Predicción</div>
       <mat-list-item>
         <mat-icon mat-list-icon>masks</mat-icon>
-        <div mat-line *ngIf="modelo.predictions[0].probability>=0.9; else sinMask">SI</div>
+        <div mat-line *ngIf="prediccionImagen.predictions[0].probability>=0.9; else sinMask">SI</div>
         <ng-template #sinMask>
           <div mat-line>NO</div>
         </ng-template>
@@ -27,13 +53,26 @@
       <mat-divider></mat-divider>
       <mat-list-item>
         <mat-icon mat-list-icon>timeline</mat-icon>
-        <div mat-line>{{modelo.predictions[0].probability}}</div>
+        <div mat-line>{{prediccionImagen.predictions[0].probability}}</div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-list>
+    <mat-list *ngIf="prediccionUrl.predictions && group.value=='url'">
+      <div mat-subheader>Predicción</div>
+      <mat-list-item>
+        <mat-icon mat-list-icon>masks</mat-icon>
+        <div mat-line *ngIf="prediccionUrl.predictions[0].probability>=0.9; else sinMask">SI</div>
+        <ng-template #sinMask>
+          <div mat-line>NO</div>
+        </ng-template>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-icon mat-list-icon>timeline</mat-icon>
+        <div mat-line>{{prediccionUrl.predictions[0].probability}}</div>
       </mat-list-item>
       <mat-divider></mat-divider>
     </mat-list>
 
   </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" *ngIf="urlImagen" (click)="predecirUrl()">Predecir</button>
-  </mat-card-actions>
 </mat-card>

@@ -18,4 +18,10 @@ export class ServicioService {
       Url: urlImagen
     });
   }
+
+  public fromImage(imagen: File): Observable<CustomVisionReturned> {
+    const formData = new FormData();
+    formData.append('imagen', imagen);
+    return this.http.post<CustomVisionReturned>(`${this.apiUrl}/image`, formData);
+  }
 }
